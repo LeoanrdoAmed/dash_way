@@ -3,32 +3,27 @@ import json
 import pandas as pd
 
 url = "https://services.contaazul.com/finance-pro-reader/v1/installment-view"
+all_items = []
 
-
-# Inicializando uma lista para armazenar todos os dados
-all_items = [] 
-
-# Lista de IDs de centros de custo (substitua pelo seu JSON neste formato)
+# Lendo a lista de centros de custo
 base_centros_de_custos = r"base_01_cc.json"
 centro_custo_json = pd.read_json(base_centros_de_custos)
-
-
-# Extraindo os IDs dos centros de custo
 cost_center_ids = centro_custo_json["centroCusto"]
 
-# Iterando sobre cada ID de centro de custo
+# Iterando sobre cada centro de custo
 for cost_center_id in cost_center_ids:
-    page = 1  # Começando pela primeira página
-    page_size = 100  # Número de itens por página
+    page = 1
+    page_size = 100
 
     while True:
-        # Configurando o payload com o centro de custo
+        print(f"Consultando página {page}...")
+
         payload = json.dumps({
             "dateFrom": None,
             "dateTo": None,
             "search": None,
             "quickFilter": "ALL",
-            "costCenterIds": [cost_center_id],  # Adicionando o ID do centro de custo
+            "costCenterIds": [cost_center_id],
             "type": "REVENUE",
         })
 
@@ -51,10 +46,8 @@ for cost_center_id in cost_center_ids:
         }
 
 
-        # Fazendo a requisição com paginação
         response = requests.post(f"{url}?page={page}&page_size={page_size}", headers=headers, data=payload)
 
-        # Verifique se a requisição foi bem-sucedida
         if response.status_code == 200:
             data = response.json()
 
@@ -62,35 +55,37 @@ for cost_center_id in cost_center_ids:
                 total_items = data['totalItems']
                 items = data['items']
 
-                # Adicionando uma nova coluna "centroCusto" a cada item
+                print(f"Página {page} recebida com {len(items)} itens.")
+
                 for item in items:
-                    item['centroCusto'] = cost_center_id  # Associa o ID do centro de custo ao item
+                    item['centroCusto'] = cost_center_id
 
-                all_items.extend(items)  # Adicionando os itens à lista
+                all_items.extend(items)
 
-                # Calcular o número total de páginas
                 total_pages = (total_items // page_size) + (1 if total_items % page_size > 0 else 0)
 
-                # Se já pegou todos os itens, pare a iteração
                 if page >= total_pages:
+                    print("Centro de custo finalizado.\n")
                     break
-                page += 1  # Incrementa a página para a próxima requisição
+                page += 1
             else:
-                print(f"A chave 'items' ou 'totalItems' não foi encontrada na resposta para o centro de custo {cost_center_id}.")
+                print("Chaves 'items' ou 'totalItems' ausentes na resposta.")
                 break
         else:
-            print(f"Erro na requisição para o centro de custo {cost_center_id}: {response.status_code}")
+            print(f"Erro {response.status_code} na requisição.")
             break
 
-# Criando o DataFrame com todos os dados coletados
+# Transformando os dados em DataFrame
 df = pd.DataFrame(all_items)
 df = df.rename(columns={"id": "id_lançamento"})
 df_expanded = pd.json_normalize(df['financialAccount'])
 df_expanded = df_expanded.rename(columns={"id": "financialAccountId2"})
 df_final = pd.concat([df, df_expanded], axis=1)
-df_final = df_final.rename(columns={"financialAccount": "financialAccountId_base"})
-df_final = df_final.rename(columns={"financialAccountId2": "financialAccountId"})
+df_final = df_final.rename(columns={
+    "financialAccount": "financialAccountId_base",
+    "financialAccountId2": "financialAccountId"
+})
 
-# Salvando o DataFrame em um arquivo Excel
-df_final.to_json(r"base_03_rc.json", orient="records")
-print("Consulta de base RC finalizada  com sucesso.")
+# Salvando resultado
+df_final.to_json(r"base_03_rc.json", orient="records", force_ascii=False)
+print("Consulta finalizada com sucesso.")
