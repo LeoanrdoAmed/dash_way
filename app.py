@@ -533,7 +533,7 @@ atualizacao_em_andamento = False
 def iniciar_atualizacao(n_clicks):
     global atualizacao_em_andamento
     if atualizacao_em_andamento:
-        return dbc.Alert("Atualização já em andamento...", color="warning")
+        return dbc.Alert("Atualização já em andamento...", color="warning", duration=25000)
 
     atualizacao_em_andamento = True
     
@@ -552,7 +552,7 @@ def iniciar_atualizacao(n_clicks):
 
     threading.Thread(target=rodar_scripts).start()
 
-    return dbc.Alert("Atualização iniciada. Aguarde alguns segundos...", color="info")
+    return dbc.Alert("Atualização iniciada. Aguarde alguns segundos...", color="info", duration=25000)
 
 
 if __name__ == "__main__":
