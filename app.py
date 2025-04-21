@@ -9,7 +9,7 @@ import flask_login
 
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
-base_rc = "base_final_04_rc.json"
+base_rc = r"base_final_04_rc.json"
 tb_rc_final = pd.read_json(base_rc)
 df = pd.DataFrame({
     "tipo": ["Entrada", "Saída"]
@@ -516,21 +516,43 @@ def atualizar_graficos(centros_custo_selecionados, data_filtro, tipos_selecionad
 
 import agendador_06  # Importa o agendador para execução automática diária
 
+import threading
+import subprocess
+from dash import ctx
+import dash_bootstrap_components as dbc
+from dash import dcc, Output, Input, State
+
+# Variável global opcional para evitar concorrência de atualizações
+atualizacao_em_andamento = False
+
 @app.callback(
     Output("mensagem-atualizacao", "children"),
     Input("btn-atualizar", "n_clicks"),
     prevent_initial_call=True
 )
-def atualizar_dados_manual(n_clicks):
-    import subprocess
-    try:
-        subprocess.run(["python", r"func_01_extratordecentrodecustos.py"])
-        subprocess.run(["python", r"func_02_extratordecontasbancárias.py"])
-        subprocess.run(["python", r"func_03_extratordecontasareceber.py"])
-        subprocess.run(["python", r"func_04_unificadordetabelas.py"])
-        return dbc.Alert("Base atualizada com sucesso!", color="success")
-    except Exception as e:
-        return dbc.Alert(f"Erro na atualização: {str(e)}", color="danger")
+def iniciar_atualizacao(n_clicks):
+    global atualizacao_em_andamento
+    if atualizacao_em_andamento:
+        return dbc.Alert("Atualização já em andamento...", color="warning")
+
+    atualizacao_em_andamento = True
+    
+    def rodar_scripts():
+        global atualizacao_em_andamento
+        try:
+            subprocess.run(["python", "func_01_extratordecentrodecustos.py"], check=True)
+            subprocess.run(["python", "func_02_extratordecontasbancárias.py"], check=True)
+            subprocess.run(["python", "func_03_extratordecontasareceber.py"], check=True)
+            subprocess.run(["python", "func_04_unificadordetabelas.py"], check=True)
+            print("Atualização concluída com sucesso.")
+        except Exception as e:
+            print(f"Erro na atualização: {e}")
+        finally:
+            atualizacao_em_andamento = False
+
+    threading.Thread(target=rodar_scripts).start()
+
+    return dbc.Alert("Atualização iniciada. Aguarde alguns segundos...", color="info")
 
 
 if __name__ == "__main__":
