@@ -7,9 +7,9 @@ import os
 import pandas as pd
 
 
-base_cc = r"base_01_cc.json")
-base_cb = r"base_02_cb.json")
-base_rc = r"base_03_rc.json")
+base_cc = os.path.join(DATA_DIR, "base_01_cc.json")
+base_cb = os.path.join(DATA_DIR, "base_02_cb.json")
+base_rc = os.path.join(DATA_DIR, "base_03_rc.json")
 
 
 df2 = pd.read_json(base_cb)

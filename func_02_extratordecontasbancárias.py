@@ -45,5 +45,5 @@ filtered_df = base_cb[['ativo','nmBanco', 'financialAccountId']]
 
 
 
-filtered_df.to_json(r"base_02_cb.json"))
+filtered_df.to_json(os.path.join(DATA_DIR, "base_02_cb.json"))
 print("Consulta de base CB finalizada  com sucesso.")
