@@ -282,12 +282,14 @@ def set_role(user_id, role):
 # ==============================
 # 4. PREPARAÇÃO DOS DADOS DO DASHBOARD
 # ==============================
+""""
 ano_atual = str(datetime.now().year)
 tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'])
 tb_rc_final['data'] = tb_rc_final['data'].dt.date
 tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
 tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data']).dt.year
 anos_disponiveis = sorted(tb_rc_final['ano'].unique())
+"""
 
 def get_date_range(option):
     today = datetime.today().date()
