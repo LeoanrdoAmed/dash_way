@@ -13,10 +13,14 @@ os.makedirs("data", exist_ok=True)
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
 base_rc = r"data/base_final_04_rc.json"
-tb_rc_final = pd.read_json(base_rc)
-df = pd.DataFrame({
-    "tipo": ["Entrada", "Saída"]
-})
+
+try:
+    tb_rc_final = pd.read_json("data/base_final_04_rc.json")
+except FileNotFoundError:
+    print("Arquivo base_final_04_rc.json não encontrado. Usando DataFrame vazio.")
+    tb_rc_final = pd.DataFrame(columns=[
+        "data", "centro_de_custo", "tipo", "valor", "status"
+    ])
 
 #from func_04_unificadordetabelas import tb_rc_final
 # ------------------------------------------------------------------
