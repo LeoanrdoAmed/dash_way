@@ -11,16 +11,23 @@ import os
 os.makedirs("data", exist_ok=True)
 
 # ------------------------------------------------------------------
-
 try:
-    # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
-    base_rc = r"data/base_final_04_rc.json"
     tb_rc_final = pd.read_json("data/base_final_04_rc.json")
 except FileNotFoundError:
     print("Arquivo base_final_04_rc.json não encontrado. Usando DataFrame vazio.")
-    tb_rc_final = pd.DataFrame(columns=[
-        "data", "centro_de_custo", "tipo", "valor", "status"
-    ])
+    tb_rc_final = pd.DataFrame()
+
+# Processar apenas se o DataFrame não estiver vazio
+if not tb_rc_final.empty:
+    tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'])
+    tb_rc_final['data'] = tb_rc_final['data'].dt.date
+    tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
+    tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data']).dt.year
+    anos_disponiveis = sorted(tb_rc_final['ano'].unique())
+else:
+    # Cria colunas vazias para que o layout não quebre
+    tb_rc_final = pd.DataFrame(columns=["data", "centro_de_custo", "tipo", "valor", "status", "unpaid", "paid"])
+    anos_disponiveis = []
 
 #from func_04_unificadordetabelas import tb_rc_final
 # ------------------------------------------------------------------
