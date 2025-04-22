@@ -9,39 +9,15 @@ import flask_login
 
 import subprocess
 
-tb_rc_final = pd.DataFrame()
-anos_disponiveis = []
-
-def carregar_base():
-    global tb_rc_final, anos_disponiveis
-    try:
-        tb_rc_final = pd.read_json("data/base_final_04_rc.json")
-        tb_rc_final["data"] = pd.to_datetime(tb_rc_final["dueDate"])
-        tb_rc_final["data"] = tb_rc_final["data"].dt.date
-        tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
-        tb_rc_final["ano"] = pd.to_datetime(tb_rc_final["data"]).dt.year
-        anos_disponiveis = sorted(tb_rc_final["ano"].dropna().unique())
-        print("Base carregada com sucesso.")
-    except Exception as e:
-        print(f"Erro ao carregar base JSON: {e}")
-        tb_rc_final = pd.DataFrame(columns=["data", "centro_de_custo", "tipo", "valor", "status", "unpaid", "paid"])
-        anos_disponiveis = []
-
 # Executa scripts uma vez no startup
-
-def rodar_scripts():
-    global atualizacao_em_andamento
-    try:
-        subprocess.run(["python", "func_01_extratordecentrodecustos.py"], check=True)
-        subprocess.run(["python", "func_02_extratordecontasbancárias.py"], check=True)
-        subprocess.run(["python", "func_03_extratordecontasareceber.py"], check=True)
-        subprocess.run(["python", "func_04_unificadordetabelas.py"], check=True)
-        print("Atualização concluída com sucesso.")
-        carregar_base()  # <- Recarrega o JSON após atualização
-    except Exception as e:
-        print(f"Erro na atualização: {e}")
-    finally:
-        atualizacao_em_andamento = False
+try:
+    subprocess.run(["python", "func_01_extratordecentrodecustos.py"], check=True)
+    subprocess.run(["python", "func_02_extratordecontasbancárias.py"], check=True)
+    subprocess.run(["python", "func_03_extratordecontasareceber.py"], check=True)
+    subprocess.run(["python", "func_04_unificadordetabelas.py"], check=True)
+    print("Scripts de dados executados com sucesso no startup.")
+except Exception as e:
+    print(f"Erro ao executar scripts no startup: {e}")
 
 
 # ------------------------------------------------------------------
