@@ -7,9 +7,6 @@ from datetime import datetime, timedelta
 from flask import Flask, request, redirect, url_for, flash, render_template_string
 import flask_login
 
-import os
-os.makedirs("data", exist_ok=True)
-
 import subprocess
 
 # Executa scripts uma vez no startup
@@ -22,24 +19,15 @@ try:
 except Exception as e:
     print(f"Erro ao executar scripts no startup: {e}")
 
-# ------------------------------------------------------------------
-try:
-    tb_rc_final = pd.read_json("data/base_final_04_rc.json")
-except FileNotFoundError:
-    print("Arquivo base_final_04_rc.json não encontrado. Usando DataFrame vazio.")
-    tb_rc_final = pd.DataFrame()
 
-# Processar apenas se o DataFrame não estiver vazio
-if not tb_rc_final.empty and 'dueDate' in tb_rc_final.columns:
-    tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'], errors='coerce')
-    tb_rc_final['data'] = tb_rc_final['data'].dt.date
-    tb_rc_final["faturamento"] = tb_rc_final.get("unpaid", 0) + tb_rc_final.get("paid", 0)
-    tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data'], errors='coerce').dt.year
-    anos_disponiveis = sorted(tb_rc_final['ano'].dropna().unique())
-else:
-    print("DataFrame vazio ou coluna 'dueDate' ausente. Criando DataFrame vazio.")
-    tb_rc_final = pd.DataFrame(columns=["data", "centro_de_custo", "tipo", "valor", "status", "unpaid", "paid"])
-    anos_disponiveis = []
+
+# ------------------------------------------------------------------
+# IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
+base_rc = r"data/base_final_04_rc.json"
+tb_rc_final = pd.read_json(base_rc)
+df = pd.DataFrame({
+    "tipo": ["Entrada", "Saída"]
+})
 
 #from func_04_unificadordetabelas import tb_rc_final
 # ------------------------------------------------------------------
@@ -294,14 +282,12 @@ def set_role(user_id, role):
 # ==============================
 # 4. PREPARAÇÃO DOS DADOS DO DASHBOARD
 # ==============================
-
 ano_atual = str(datetime.now().year)
 tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'])
 tb_rc_final['data'] = tb_rc_final['data'].dt.date
 tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
 tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data']).dt.year
 anos_disponiveis = sorted(tb_rc_final['ano'].unique())
-
 
 def get_date_range(option):
     today = datetime.today().date()
