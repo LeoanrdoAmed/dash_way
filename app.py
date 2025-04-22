@@ -7,9 +7,12 @@ from datetime import datetime, timedelta
 from flask import Flask, request, redirect, url_for, flash, render_template_string
 import flask_login
 
+import os
+os.makedirs("data", exist_ok=True)
+
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
-base_rc = r"base_final_04_rc.json"
+base_rc = r"data/base_final_04_rc.json"
 tb_rc_final = pd.read_json(base_rc)
 df = pd.DataFrame({
     "tipo": ["Entrada", "Saída"]
