@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: dashway-dashboard
+    name: dash_way_group
     env: python
     plan: standard
     buildCommand: pip install -r requirements.txt
@@ -9,8 +9,8 @@ services:
       - key: PYTHON_VERSION
         value: 3.10
     volumes:
-      - name: dashway-data
+      - name: dashway-volume-v2
         mountPath: /data
 
 volumes:
-  - name: dashway-data
+  - name: dashway-volume-v2
