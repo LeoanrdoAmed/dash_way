@@ -8,6 +8,9 @@ from flask import Flask, request, redirect, url_for, flash, render_template_stri
 import flask_login
 
 import subprocess
+import os
+
+os.makedirs("/data", exist_ok=True)
 
 # Executa scripts uma vez no startup
 try:
