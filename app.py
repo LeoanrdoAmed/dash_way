@@ -18,14 +18,14 @@ except FileNotFoundError:
     tb_rc_final = pd.DataFrame()
 
 # Processar apenas se o DataFrame não estiver vazio
-if not tb_rc_final.empty:
-    tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'])
+if not tb_rc_final.empty and 'dueDate' in tb_rc_final.columns:
+    tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'], errors='coerce')
     tb_rc_final['data'] = tb_rc_final['data'].dt.date
-    tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
-    tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data']).dt.year
-    anos_disponiveis = sorted(tb_rc_final['ano'].unique())
+    tb_rc_final["faturamento"] = tb_rc_final.get("unpaid", 0) + tb_rc_final.get("paid", 0)
+    tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data'], errors='coerce').dt.year
+    anos_disponiveis = sorted(tb_rc_final['ano'].dropna().unique())
 else:
-    # Cria colunas vazias para que o layout não quebre
+    print("DataFrame vazio ou coluna 'dueDate' ausente. Criando DataFrame vazio.")
     tb_rc_final = pd.DataFrame(columns=["data", "centro_de_custo", "tipo", "valor", "status", "unpaid", "paid"])
     anos_disponiveis = []
 
