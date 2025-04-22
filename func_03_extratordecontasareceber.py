@@ -1,3 +1,5 @@
+import os
+os.makedirs("/data", exist_ok=True)
 import requests
 import json
 import pandas as pd
@@ -87,4 +89,4 @@ df_final = df_final.rename(columns={
 })
 
 # Salvando resultado
-df_final.to_json(r"/data/base_03_rc.json", orient="records", force_ascii=False)
+df_final.to_json(r"base_03_rc.json", orient="records", force_ascii=False)

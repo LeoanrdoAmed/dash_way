@@ -1,3 +1,5 @@
+import os
+os.makedirs("/data", exist_ok=True)
 import requests
 import pandas as pd
 
@@ -39,6 +41,6 @@ filtered_df = base_cb[['ativo','nmBanco', 'financialAccountId']]
 
 
 
-filtered_df.to_json(r"/data/base_02_cb.json")
+filtered_df.to_json(r"base_02_cb.json")
 print("Consulta de base CB finalizada  com sucesso.")
 
