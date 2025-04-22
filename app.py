@@ -10,6 +10,18 @@ import flask_login
 import os
 os.makedirs("data", exist_ok=True)
 
+import subprocess
+
+# Executa scripts uma vez no startup
+try:
+    subprocess.run(["python", "func_01_extratordecentrodecustos.py"], check=True)
+    subprocess.run(["python", "func_02_extratordecontasbancárias.py"], check=True)
+    subprocess.run(["python", "func_03_extratordecontasareceber.py"], check=True)
+    subprocess.run(["python", "func_04_unificadordetabelas.py"], check=True)
+    print("Scripts de dados executados com sucesso no startup.")
+except Exception as e:
+    print(f"Erro ao executar scripts no startup: {e}")
+
 # ------------------------------------------------------------------
 try:
     tb_rc_final = pd.read_json("data/base_final_04_rc.json")
@@ -282,14 +294,14 @@ def set_role(user_id, role):
 # ==============================
 # 4. PREPARAÇÃO DOS DADOS DO DASHBOARD
 # ==============================
-""""
+
 ano_atual = str(datetime.now().year)
 tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'])
 tb_rc_final['data'] = tb_rc_final['data'].dt.date
 tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
 tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data']).dt.year
 anos_disponiveis = sorted(tb_rc_final['ano'].unique())
-"""
+
 
 def get_date_range(option):
     today = datetime.today().date()
