@@ -11,10 +11,10 @@ import os
 os.makedirs("data", exist_ok=True)
 
 # ------------------------------------------------------------------
-# IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
-base_rc = r"data/base_final_04_rc.json"
 
 try:
+    # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
+    base_rc = r"data/base_final_04_rc.json"
     tb_rc_final = pd.read_json("data/base_final_04_rc.json")
 except FileNotFoundError:
     print("Arquivo base_final_04_rc.json não encontrado. Usando DataFrame vazio.")
