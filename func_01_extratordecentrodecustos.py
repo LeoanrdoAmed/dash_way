@@ -1,4 +1,10 @@
 import os
+import pandas as pd
+
+DATA_DIR = "/data" if os.path.exists("/data") else "data"
+os.makedirs(DATA_DIR, exist_ok=True)
+
+import os
 
 # Detecta automaticamente o caminho correto para salvar os arquivos
 DATA_DIR = "/data" if os.path.exists("/data") else "data"
