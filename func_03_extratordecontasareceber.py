@@ -6,7 +6,7 @@ url = "https://services.contaazul.com/finance-pro-reader/v1/installment-view"
 all_items = []
 
 # Lendo a lista de centros de custo
-base_centros_de_custos = r"/data/base_01_cc.json"
+base_centros_de_custos = r"base_01_cc.json"
 centro_custo_json = pd.read_json(base_centros_de_custos)
 cost_center_ids = centro_custo_json["centroCusto"]
 
@@ -87,4 +87,4 @@ df_final = df_final.rename(columns={
 })
 
 # Salvando resultado
-df_final.to_json(r"/data/base_03_rc.json", orient="records", force_ascii=False)
+df_final.to_json(r"base_03_rc.json", orient="records", force_ascii=False)

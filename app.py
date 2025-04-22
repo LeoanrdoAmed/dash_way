@@ -7,25 +7,9 @@ from datetime import datetime, timedelta
 from flask import Flask, request, redirect, url_for, flash, render_template_string
 import flask_login
 
-import subprocess
-import os
-
-os.makedirs("/data", exist_ok=True)
-
-# Executa scripts uma vez no startup
-try:
-    subprocess.run(["python", "func_01_extratordecentrodecustos.py"], check=True)
-    subprocess.run(["python", "func_02_extratordecontasbancárias.py"], check=True)
-    subprocess.run(["python", "func_03_extratordecontasareceber.py"], check=True)
-    subprocess.run(["python", "func_04_unificadordetabelas.py"], check=True)
-    print("Scripts de dados executados com sucesso no startup.")
-except Exception as e:
-    print(f"Erro ao executar scripts no startup: {e}")
-
-
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
-base_rc = r"/data/base_final_04_rc.json"
+base_rc = r"base_final_04_rc.json"
 tb_rc_final = pd.read_json(base_rc)
 df = pd.DataFrame({
     "tipo": ["Entrada", "Saída"]
