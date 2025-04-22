@@ -47,7 +47,7 @@ if response.status_code == 200:
     base_cc.rename(columns={'id': 'centroCusto'}, inplace=True)
     
     # Salva o DataFrame atualizado em arquivos JSON e Excel
-    base_cc.to_json(r"data/base_01_cc.json")
+    base_cc.to_json(r"/data/base_01_cc.json")
  
     
     print("Consulta de base CC finalizada  com sucesso.")
