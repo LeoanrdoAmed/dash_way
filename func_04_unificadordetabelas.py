@@ -23,7 +23,7 @@ tb_rc_final_01 = tb_rc_final[tb_rc_final["descrição"].str.contains(r"^Venda(?:
 #tb_rc_final_01 = tb_rc_final[tb_rc_final["descrição"].str.contains(r"^Venda(?:\\s.*)?$", regex=True)]
 
 
-tb_rc_final_01.to_json("base_final_04_rc.json")
+tb_rc_final_01.to_json("/data/base_final_04_rc.json")
 #tb_rc_final_01.to_excel("base_final_04_rc.xlsx")
 #tb_rc_final.to_excel("base_final_05_rc.xlsx")
 print("Consulta de base UNI finalizada  com sucesso.")

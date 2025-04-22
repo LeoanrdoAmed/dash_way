@@ -6,11 +6,12 @@ from datetime import datetime, timedelta
 
 from flask import Flask, request, redirect, url_for, flash, render_template_string
 import flask_login
+import os
 
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
-base_rc = r"base_final_04_rc.json"
-tb_rc_final = pd.read_json(base_rc)
+base_rc = "/data/base_final_04_rc.json"
+tb_rc_final = pd.read_json(base_rc) if os.path.exists(base_rc) else pd.DataFrame(columns=["data", "centro_de_custo", "tipo", "status", "faturamento", "paid", "unpaid", "dueDate"])
 df = pd.DataFrame({
     "tipo": ["Entrada", "Saída"]
 })
