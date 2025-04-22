@@ -1,5 +1,9 @@
 import os
-os.makedirs("/data", exist_ok=True)
+
+# Detecta automaticamente o caminho correto para salvar os arquivos
+DATA_DIR = "/data" if os.path.exists("/data") else "data"
+os.makedirs(DATA_DIR, exist_ok=True)
+import os
 import requests
 import pandas as pd
 
@@ -41,6 +45,5 @@ filtered_df = base_cb[['ativo','nmBanco', 'financialAccountId']]
 
 
 
-filtered_df.to_json(r"base_02_cb.json")
+filtered_df.to_json(r"base_02_cb.json"))
 print("Consulta de base CB finalizada  com sucesso.")
-
