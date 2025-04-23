@@ -442,6 +442,10 @@ app.layout = serve_dashboard
 def atualizar_graficos(centros_custo_selecionados, data_filtro, tipos_selecionados):
     try:
         tb_rc_final = pd.read_json("/data/base_final_04_rc.json")
+        tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'])
+        tb_rc_final['data'] = tb_rc_final['data'].dt.date
+        tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
+
     except Exception as e:
         print("Erro ao ler base atualizada:", e)
         tb_rc_final = pd.DataFrame()
