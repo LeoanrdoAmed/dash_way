@@ -9,7 +9,7 @@ import flask_login
 
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
-base_rc = r"base_final_04_rc.json"
+base_rc = r"data/base_final_04_rc.json"
 tb_rc_final = pd.read_json(base_rc)
 df = pd.DataFrame({
     "tipo": ["Entrada", "Saída"]
@@ -540,10 +540,10 @@ def iniciar_atualizacao(n_clicks):
     def rodar_scripts():
         global atualizacao_em_andamento
         try:
-            subprocess.run(["python", "func_01_extratordecentrodecustos.py"], check=True)
-            subprocess.run(["python", "func_02_extratordecontasbancárias.py"], check=True)
-            subprocess.run(["python", "func_03_extratordecontasareceber.py"], check=True)
-            subprocess.run(["python", "func_04_unificadordetabelas.py"], check=True)
+            subprocess.run(["python", "scripts/func_01_extratordecentrodecustos.py"], check=True)
+            subprocess.run(["python", "scripts/func_02_extratordecontasbancárias.py"], check=True)
+            subprocess.run(["python", "scripts/func_03_extratordecontasareceber.py"], check=True)
+            subprocess.run(["python", "scripts/func_04_unificadordetabelas.py"], check=True)
             print("Atualização concluída com sucesso.")
         except Exception as e:
             print(f"Erro na atualização: {e}")

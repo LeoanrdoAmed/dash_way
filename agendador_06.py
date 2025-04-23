@@ -5,10 +5,10 @@ import subprocess
 
 def rodar_extracao():
     print("Iniciando execução automática dos scripts...")
-    subprocess.run(["python", r"func_01_extratordecentrodecustos.py"])
-    subprocess.run(["python", r"func_02_extratordecontasbancárias.py"])
-    subprocess.run(["python", r"func_03_extratordecontasareceber.py"])
-    subprocess.run(["python", r"func_04_unificadordetabelas.py"])
+    subprocess.run(["python", r"scripts/func_01_extratordecentrodecustos.py"])
+    subprocess.run(["python", r"scripts/func_02_extratordecontasbancárias.py"])
+    subprocess.run(["python", r"scripts/func_03_extratordecontasareceber.py"])
+    subprocess.run(["python", r"scripts/func_04_unificadordetabelas.py"])
     print("Extração automática finalizada.")
 
 # Inicia agendador
