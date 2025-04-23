@@ -281,12 +281,15 @@ def set_role(user_id, role):
 # ==============================
 # 4. PREPARAÇÃO DOS DADOS DO DASHBOARD
 # ==============================
+
+"""
 ano_atual = str(datetime.now().year)
 tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'])
 tb_rc_final['data'] = tb_rc_final['data'].dt.date
 tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
 tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data']).dt.year
 anos_disponiveis = sorted(tb_rc_final['ano'].unique())
+"""
 
 def get_date_range(option):
     today = datetime.today().date()
@@ -316,10 +319,17 @@ app = dash.Dash(
 def serve_dashboard():
     global tb_rc_final
     try:
+        ano_atual = str(datetime.now().year)
         tb_rc_final = pd.read_json("/data/base_final_04_rc.json")
+        tb_rc_final['data'] = pd.to_datetime(tb_rc_final['dueDate'])
+        tb_rc_final['data'] = tb_rc_final['data'].dt.date
+        tb_rc_final["faturamento"] = tb_rc_final["unpaid"] + tb_rc_final["paid"]
+        tb_rc_final['ano'] = pd.to_datetime(tb_rc_final['data']).dt.year
+        anos_disponiveis = sorted(tb_rc_final['ano'].unique())
     except Exception as e:
-        print("Erro ao carregar base atualizada:", e)
-        tb_rc_final = pd.DataFrame(columns=["data", "valor", "tipo", "descrição"])
+        print("Erro ao preparar colunas do tb_rc_final:", e)
+        tb_rc_final = pd.DataFrame()
+        anos_disponiveis = []
 
     print("Layout acessado. Usuário autenticado?", flask_login.current_user.is_authenticated)  # Debug
     if not flask_login.current_user.is_authenticated:
