@@ -4,7 +4,7 @@ import pandas as pd
 
 url = "https://services.contaazul.com/finance-pro-reader/v1/installment-view"
 all_items = []
-centro_custo_json = pd.read_json("data/base_01_cc.json")
+centro_custo_json = pd.read_json("/data/base_01_cc.json")
 cost_center_ids = centro_custo_json["centroCusto"]
 
 for cost_center_id in cost_center_ids:
@@ -32,20 +32,17 @@ for cost_center_id in cost_center_ids:
                     item['centroCusto'] = cost_center_id
                 all_items.extend(items)
                 if page >= ((data['totalItems'] - 1) // page_size + 1):
-                    print("Centro de custo finalizado.\n")
                     break
                 page += 1
             else:
-                print("Chaves ausentes na resposta.")
                 break
         else:
-            print(f"Erro {response.status_code} na requisição.")
             break
 
-df = pd.DataFrame(all_items).rename(columns={"id": "id_lançamento"})
+df = pd.DataFrame(all_items).rename(columns={"id": "id_lancamento"})
 df_expanded = pd.json_normalize(df['financialAccount']).rename(columns={"id": "financialAccountId2"})
 df_final = pd.concat([df, df_expanded], axis=1).rename(columns={
     "financialAccount": "financialAccountId_base",
     "financialAccountId2": "financialAccountId"
 })
-df_final.to_json("data/base_03_mv.json", orient="records", force_ascii=False)
+df_final.to_json("/data/base_03_mv.json", orient="records", force_ascii=False)
