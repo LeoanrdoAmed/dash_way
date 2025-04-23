@@ -1,19 +1,23 @@
-import os
 import pandas as pd
+import sqlite3
 
-base_cc = "/data/base_01_cc.json"
-base_cb = "/data/base_02_cb.json"
-base_mv = "/data/base_03_mv.json"
+conn = sqlite3.connect("/data/dashway.db")
+df_cb = pd.read_sql("SELECT * FROM contas_bancarias", conn)
+df_cc = pd.read_sql("SELECT * FROM centros_de_custo", conn)
+df_rc = pd.read_sql("SELECT * FROM contas_receber", conn)
 
-for file in [base_cc, base_cb, base_mv]:
-    if not os.path.exists(file):
-        print(f"Arquivo não encontrado: {file}")
-        exit(1)
+tb_rc = pd.merge(df_rc, df_cb, on='financialAccountId', how='left')
+tb_rc_final = pd.merge(tb_rc, df_cc, on='centroCusto', how='left')
 
-df1 = pd.read_json(base_cc)
-df2 = pd.read_json(base_cb)
-df3 = pd.read_json(base_mv)
+tb_rc_final.rename(columns={
+    "date": "data", "description": "descrição", "type": "tipo", "value": "valor",
+    "categoryName": "categoria", "financialAccountId": "codigo_bancario", 
+    "centroCusto": "centro_de_custo_id", "nmBanco": "conta_bancaria", 
+    "name": "centro_de_custo", "active": "status_da_conta"
+}, inplace=True)
 
-tb_rc_final = pd.concat([df1, df2, df3], ignore_index=True)
-tb_rc_final.to_json("/data/base_final_04_rc.json", orient="records", force_ascii=False)
-print("Base final salva com sucesso.")
+tb_rc_final = tb_rc_final[tb_rc_final["descrição"].str.contains(r"^Venda(?:\s.*)?$", regex=True)]
+
+tb_rc_final.to_sql("base_unificada", conn, if_exists="replace", index=False)
+conn.close()
+print("Base unificada salva com sucesso.")

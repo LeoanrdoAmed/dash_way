@@ -1,19 +1,20 @@
 services:
   - type: web
-    name: painel-dashboard
+    name: dashway-dashboard
     env: python
+    plan: standard
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:server
+    startCommand: gunicorn app:server --timeout 300
     disk:
-      name: volume-json
+      name: volume-dados
       mountPath: /data
       sizeGB: 1
 
   - type: background
-    name: atualizador-automatico
+    name: dashway-atualizador
     env: python
     startCommand: python agendador_06.py
-    schedule: "0 0 * * *"  # todos os dias à meia-noite
+    schedule: "0 0 * * *"  # executa todos os dias à meia-noite
     disk:
-      name: volume-json
+      name: volume-dados
       mountPath: /data
