@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import sqlite3
 
 url = "https://services.contaazul.com/contaazul-bff/dashboard/v1/financial-accounts"
 headers = {
@@ -17,5 +18,8 @@ base_cb['nmBanco'] = base_cb['bankAccount'].apply(lambda x: x['nmBanco'])
 base_cb['uuid'] = base_cb['bankAccount'].apply(lambda x: x['uuid'])
 base_cb.rename(columns={'uuid': 'financialAccountId'}, inplace=True)
 filtered_df = base_cb[['ativo','nmBanco', 'financialAccountId']]
-filtered_df.to_json("/data/base_02_cb.json")
-print("Consulta de base CB finalizada com sucesso.")
+
+conn = sqlite3.connect("/data/dashway.db")
+filtered_df.to_sql("contas_bancarias", conn, if_exists="replace", index=False)
+conn.close()
+print("Base contas bancárias salva com sucesso.")
