@@ -1,16 +1,10 @@
 services:
-  - type: web
-    name: dash_way_group
-    env: python
-    plan: standard
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:server --timeout 300
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10
-    volumes:
-      - name: dashway-volume-v2
-        mountPath: /data
-
-volumes:
-  - name: dashway-volume-v2
+   - type: web
+     name: dashway-dashboard
+     env: python
+     plan: standard
+     buildCommand: pip install -r requirements.txt
+     startCommand: gunicorn app:server --timeout 300
+     envVars:
+       - key: PYTHON_VERSION
+         value: 3.10
