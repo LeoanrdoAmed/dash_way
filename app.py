@@ -8,12 +8,13 @@ from flask import Flask, request, redirect, url_for, flash, render_template_stri
 import flask_login
 
 import subprocess
+import runpy
 
 try:
-    subprocess.run(["python", "scripts/func_01_extratordecentrodecustos.py"], check=True)
-    subprocess.run(["python", "scripts/func_02_extratordecontasbancárias.py"], check=True)
-    subprocess.run(["python", "scripts/func_03_extratordecontasareceber.py"], check=True)
-    subprocess.run(["python", "scripts/func_04_unificadordetabelas.py"], check=True)
+    runpy.run_path("scripts/func_01_extratordecentrodecustos.py")
+    runpy.run_path("scripts/func_02_extratordecontasbancárias.py")
+    runpy.run_path("scripts/func_03_extratordecontasareceber.py")
+    runpy.run_path("scripts/func_04_unificadordetabelas.py")
     print("Bases populadas com sucesso no volume /data.")
 except Exception as e:
     print("Erro ao popular base:", e)
@@ -552,10 +553,10 @@ def iniciar_atualizacao(n_clicks):
     def rodar_scripts():
         global atualizacao_em_andamento
         try:
-            subprocess.run(["python", "scripts/func_01_extratordecentrodecustos.py"], check=True)
-            subprocess.run(["python", "scripts/func_02_extratordecontasbancárias.py"], check=True)
-            subprocess.run(["python", "scripts/func_03_extratordecontasareceber.py"], check=True)
-            subprocess.run(["python", "scripts/func_04_unificadordetabelas.py"], check=True)
+            runpy.run_path("scripts/func_01_extratordecentrodecustos.py")
+            runpy.run_path("scripts/func_02_extratordecontasbancárias.py")
+            runpy.run_path("scripts/func_03_extratordecontasareceber.py")
+            runpy.run_path("scripts/func_04_unificadordetabelas.py")
             print("Atualização concluída com sucesso.")
         except Exception as e:
             print(f"Erro na atualização: {e}")
@@ -563,7 +564,7 @@ def iniciar_atualizacao(n_clicks):
             atualizacao_em_andamento = False
 
     threading.Thread(target=rodar_scripts).start()
-
+    
     return dbc.Alert("Atualização iniciada. Aguarde alguns segundos...", color="info", duration=25000)
 
 
