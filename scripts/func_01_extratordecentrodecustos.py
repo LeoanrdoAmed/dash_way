@@ -54,3 +54,6 @@ if response.status_code == 200:
 else:
     print(f"Erro na requisição: {response.status_code}")
     print("Resposta:", response.text)
+
+with open("/data/debug_log.txt", "a") as f:
+    f.write("Script func_01 executado\\n")
