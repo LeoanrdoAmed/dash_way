@@ -1,9 +1,3 @@
-import os
-
-# Detecta automaticamente o caminho correto para salvar os arquivos
-DATA_DIR = "/data" if os.path.exists("/data") else "data"
-os.makedirs(DATA_DIR, exist_ok=True)
-import os
 import requests
 import pandas as pd
 import json
@@ -53,7 +47,7 @@ if response.status_code == 200:
     base_cc.rename(columns={'id': 'centroCusto'}, inplace=True)
     
     # Salva o DataFrame atualizado em arquivos JSON e Excel
-    base_cc.to_json(os.path.join(DATA_DIR, "base_01_cc.json"))
+    base_cc.to_json(r"base_01_cc.json")
  
     
     print("Consulta de base CC finalizada  com sucesso.")
