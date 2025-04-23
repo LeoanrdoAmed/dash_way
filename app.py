@@ -136,7 +136,7 @@ def atualizar_base(n_clicks):
         global atualizacao_em_andamento
         try:
             subprocess.run(["python", "func_01_extratordecentrodecustos.py"], check=True)
-            subprocess.run(["python", "func_02_extratordecontasbancarias.py"], check=True)
+            subprocess.run(["python", "func_02_extratordecontasbancárias.py"], check=True)
             subprocess.run(["python", "func_03_extratordecontasareceber.py"], check=True)
             subprocess.run(["python", "func_04_unificadordetabelas.py"], check=True)
         except Exception as e:
