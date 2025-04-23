@@ -1,13 +1,19 @@
-# render.yaml
 services:
   - type: web
-    name: dash_way_group
-    ...
-  - type: worker
-    name: dash_way_worker
-    runtime: python
-    buildCommand: ""
-    startCommand: "python inicializador_dados.py"
-    envVars:
-      - key: DATA_PATH
-        value: /data
+    name: painel-dashboard
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:server
+    disk:
+      name: volume-json
+      mountPath: /data
+      sizeGB: 1
+
+  - type: background
+    name: atualizador-automatico
+    env: python
+    startCommand: python agendador_06.py
+    schedule: "0 0 * * *"  # todos os dias à meia-noite
+    disk:
+      name: volume-json
+      mountPath: /data
