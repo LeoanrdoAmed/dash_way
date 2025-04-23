@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import json
 
+
 url = "https://services.contaazul.com/finance-pro/v1/cost-centers?search=&page_size=10&page=1&quick_filter=ACTIVE"
 
 payload = {}
@@ -55,5 +56,6 @@ else:
     print(f"Erro na requisição: {response.status_code}")
     print("Resposta:", response.text)
 
-with open("/data/debug_log.txt", "a") as f:
-    f.write("Script func_01 executado\\n")
+print(">>> Executando script func_01")
+with open("/data/teste_runpy_func_01.txt", "w") as f:
+    f.write("func_01 executado via runpy")
