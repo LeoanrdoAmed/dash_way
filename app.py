@@ -11,7 +11,7 @@ import os
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
 base_rc = "/data/base_final_04_rc.json"
-tb_rc_final = pd.read_json(base_rc) if os.path.exists(base_rc) else pd.DataFrame(columns=["data", "centro_de_custo", "tipo", "status", "faturamento", "paid", "unpaid", "dueDate"])
+# REMOVIDO: tb_rc_final = pd.read_json(base_rc) (carregado dinamicamente no callback) if os.path.exists(base_rc) else pd.DataFrame(columns=["data", "centro_de_custo", "tipo", "status", "faturamento", "paid", "unpaid", "dueDate"])
 df = pd.DataFrame({
     "tipo": ["Entrada", "Saída"]
 })
@@ -411,6 +411,12 @@ app.layout = serve_dashboard
      Input("dropdown-tipo-movimentacao", "value")]
 )
 def atualizar_graficos(centros_custo_selecionados, data_filtro, tipos_selecionados):
+    import os
+    import pandas as pd
+
+    DATA_DIR = "/data" if os.path.exists("/data") else "data"
+    base_path = os.path.join(DATA_DIR, "base_final_04_rc.json")
+    tb_rc_final = pd.read_json(base_path)
     start_date, end_date = get_date_range(data_filtro)
     tb_rc = tb_rc_final.copy()
 
