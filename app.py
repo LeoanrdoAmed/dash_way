@@ -9,7 +9,7 @@ import os
 import threading
 import subprocess
 
-DATA_PATH = "/data/base_final_04_rc.json"
+DATA_PATH = "/data//data/base_final_04_rc.json"
 
 def carregar_dados():
     if os.path.exists(DATA_PATH):
@@ -136,7 +136,7 @@ def atualizar_base(n_clicks):
         global atualizacao_em_andamento
         try:
             subprocess.run(["python", "func_01_extratordecentrodecustos.py"], check=True)
-            subprocess.run(["python", "func_02_extratordecontasbancárias.py"], check=True)
+            subprocess.run(["python", "func_02_extratordecontasbancarias.py"], check=True)
             subprocess.run(["python", "func_03_extratordecontasareceber.py"], check=True)
             subprocess.run(["python", "func_04_unificadordetabelas.py"], check=True)
         except Exception as e:
