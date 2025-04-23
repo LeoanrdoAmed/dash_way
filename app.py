@@ -23,7 +23,7 @@ except Exception as e:
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
 base_rc = r"/data/base_final_04_rc.json"
-tb_rc_final = pd.read_json(base_rc)
+#tb_rc_final = pd.read_json(base_rc)
 df = pd.DataFrame({
     "tipo": ["Entrada", "Saída"]
 })
@@ -320,7 +320,7 @@ def serve_dashboard():
     except Exception as e:
         print("Erro ao carregar base atualizada:", e)
         tb_rc_final = pd.DataFrame(columns=["data", "valor", "tipo", "descrição"])
-        
+
     print("Layout acessado. Usuário autenticado?", flask_login.current_user.is_authenticated)  # Debug
     if not flask_login.current_user.is_authenticated:
          return html.Div([ dcc.Location(pathname='/login', id='redirect-location', refresh=True) ])
@@ -430,6 +430,12 @@ app.layout = serve_dashboard
      Input("dropdown-tipo-movimentacao", "value")]
 )
 def atualizar_graficos(centros_custo_selecionados, data_filtro, tipos_selecionados):
+    try:
+        tb_rc_final = pd.read_json("/data/base_final_04_rc.json")
+    except Exception as e:
+        print("Erro ao ler base atualizada:", e)
+        tb_rc_final = pd.DataFrame()
+
     start_date, end_date = get_date_range(data_filtro)
     tb_rc = tb_rc_final.copy()
 
