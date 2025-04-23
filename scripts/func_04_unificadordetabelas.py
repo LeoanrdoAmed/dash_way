@@ -19,8 +19,9 @@ tb_rc_final = pd.merge(tb_rc, df3, on='centroCusto', how='left')
 tb_rc_final.rename(columns={"date": "data", "description" : "descrição", "type" : "tipo","value" : "valor", "categoryName" : "categoria", "financialAccountId": "codigo_bancario", "centroCusto" : "centro_de_custo_id", "nmBanco" : "conta_bancaria", "name" : "centro_de_custo", "active" : 'status_da_conta'}, inplace=True)
 
 #tb_rc_final_01 = tb_rc_final[tb_rc_final["descrição"].str.contains(r"^Venda(\s.*)?$", regex=True)]
-tb_rc_final_01 = tb_rc_final[tb_rc_final["descrição"].str.contains(r"^Venda(?:\s.*)?$", regex=True)]
+#tb_rc_final_01 = tb_rc_final[tb_rc_final["descrição"].str.contains(r"^Venda(?:\s.*)?$", regex=True)]
 #tb_rc_final_01 = tb_rc_final[tb_rc_final["descrição"].str.contains(r"^Venda(?:\\s.*)?$", regex=True)]
+tb_rc_final_01 = tb_rc_final[tb_rc_final["descrição"].str.contains(r"\bVenda\b", case=False, na=False)]
 
 
 tb_rc_final_01.to_json("/data/base_final_04_rc.json")
