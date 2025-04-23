@@ -314,6 +314,13 @@ app = dash.Dash(
 
 # Layout dinâmico: reavaliado sempre que a página for carregada
 def serve_dashboard():
+    global tb_rc_final
+    try:
+        tb_rc_final = pd.read_json("/data/base_final_04_rc.json")
+    except Exception as e:
+        print("Erro ao carregar base atualizada:", e)
+        tb_rc_final = pd.DataFrame(columns=["data", "valor", "tipo", "descrição"])
+        
     print("Layout acessado. Usuário autenticado?", flask_login.current_user.is_authenticated)  # Debug
     if not flask_login.current_user.is_authenticated:
          return html.Div([ dcc.Location(pathname='/login', id='redirect-location', refresh=True) ])
