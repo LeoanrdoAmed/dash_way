@@ -7,6 +7,18 @@ from datetime import datetime, timedelta
 from flask import Flask, request, redirect, url_for, flash, render_template_string
 import flask_login
 
+import subprocess
+
+try:
+    subprocess.run(["python", "scripts/func_01_extratordecentrodecustos.py"], check=True)
+    subprocess.run(["python", "scripts/func_02_extratordecontasbancárias.py"], check=True)
+    subprocess.run(["python", "scripts/func_03_extratordecontasareceber.py"], check=True)
+    subprocess.run(["python", "scripts/func_04_unificadordetabelas.py"], check=True)
+    print("Bases populadas com sucesso no volume /data.")
+except Exception as e:
+    print("Erro ao popular base:", e)
+
+
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
 base_rc = r"/data/base_final_04_rc.json"
