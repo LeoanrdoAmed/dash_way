@@ -9,7 +9,7 @@ import flask_login
 
 # ------------------------------------------------------------------
 # IMPORTAÇÃO DOS DADOS (substitua pelos seus módulos)
-base_rc = r"data/base_final_04_rc.json"
+base_rc = r"/data/base_final_04_rc.json"
 tb_rc_final = pd.read_json(base_rc)
 df = pd.DataFrame({
     "tipo": ["Entrada", "Saída"]
