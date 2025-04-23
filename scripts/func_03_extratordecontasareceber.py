@@ -6,7 +6,7 @@ url = "https://services.contaazul.com/finance-pro-reader/v1/installment-view"
 all_items = []
 
 # Lendo a lista de centros de custo
-base_centros_de_custos = r"data/data/base_01_cc.json"
+base_centros_de_custos = r"data/base_01_cc.json"
 centro_custo_json = pd.read_json(base_centros_de_custos)
 cost_center_ids = centro_custo_json["centroCusto"]
 
